@@ -36,7 +36,8 @@ public class BasicDocument extends Document
 	{
 		//TODO: Implement this method in week 2 according to the comments above.  
 		// See the Module 2 support videos if you need help.
-	    return 0;
+		List<String> tokens = getTokens("[a-zA-Z']+");
+	    return tokens.size();
 	}
 	
 	/**
@@ -56,7 +57,11 @@ public class BasicDocument extends Document
 	{
 	    //TODO: Implement this method.  See the Module 2 support videos 
         // if you need help.
-        return 0;
+		if (this.getNumWords() == 0)
+			return 0;
+		String[] tokens=getText().split("[!?.]+") ;//("[!.?]+");
+		
+	    return tokens.length;
 	}
 	
 	/**
@@ -81,9 +86,22 @@ public class BasicDocument extends Document
 		// expression for the syllable counting.  We recommend you implement 
 		// the helper function countSyllables in Document.java using a loop, 
 		// and then call it here on each word.
-        return 0;
+		//List<String> tokens = getTokens("[a-zA-Z']+");
+		//List<String> tokens1 = getTokens(" [^aAoOuUiIyYwWeE]+e |e*[aAoOuUiIyYwW]+e*");
+		String text = super.getText().toLowerCase();
+		BasicDocument basicDocument = new BasicDocument(text);
+		List<String> tokens1 = basicDocument.getTokens(" [^aouiywe]+e |[aouiyw]+e*|e[aouiywe]+| e|[^aouiywe]e[^aouiywe .,!)]");
+
+		System.out.println(tokens1);
+		
+		//int vowels;
+		/*for (String word : tokens) {
+			BasicDocument test = new BasicDocument(word);
+			
+		}/**/
+        return tokens1.size();
 	}
-	
+	    
 	
 	/* The main method for testing this class. 
 	 * You are encouraged to add your own tests.  */
