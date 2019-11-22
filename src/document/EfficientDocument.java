@@ -1,7 +1,7 @@
 package document;
 
 import java.util.List;
-
+import  java.lang.Character;
 /** 
  * A class that represents a text document
  * It does one pass through the document to count the number of syllables, words, 
@@ -38,7 +38,10 @@ public class EfficientDocument extends Document {
 		return !(tok.indexOf("!") >=0 || tok.indexOf(".") >=0 || tok.indexOf("?")>=0);
 	}
 	
-	
+	private boolean isVowel(char c) {
+		return(c=='a' || c=='A' || c=='e' || c=='E' || c=='i' || c=='I' || c=='o' || c=='O' ||    
+				c=='u' || c=='U' || c=='y' || c=='Y' );
+	}
     /** Passes through the text one time to count the number of words, syllables 
      * and sentences, and set the member variables appropriately.
      * Words, sentences and syllables are defined as described below. 
@@ -50,10 +53,69 @@ public class EfficientDocument extends Document {
 		// That is not a word or a sentence-ending puctuation.
 		// MAKE SURE YOU UNDERSTAND THIS LINE BEFORE YOU CODE THE REST
 		// OF THIS METHOD.
-		List<String> tokens = getTokens("[!?.]+|[a-zA-Z]+");
+		//List<String> tokens = getTokens("[!?.]+|[a-zA-Z]+");
 		
 		// TODO: Finish this method.  Remember the countSyllables method from 
 		// Document.  That will come in handy here.  isWord defined above will also help.
+		this.numSentences=0;
+		this.numSyllables=0;
+		this.numWords=0;
+		String text = super.getText();
+		char[] arr = text.toCharArray();
+		int i=0;
+		StringBuilder S = new StringBuilder();
+
+		while(i< arr.length) {
+			//System.out.print(arr[i]);
+			boolean wordFlag=false;
+			boolean senFlag=false;
+			char vowelCount=0;
+			//SStringBuilder word = new StringBuilder();
+			while(i<arr.length && Character.isLetter(arr[i])) {
+				boolean vowelFlag=false;
+				//vowelCount=0;
+				wordFlag=true;
+				while(i<arr.length && isVowel(arr[i])) {
+					vowelFlag = true;
+					//System.out.print(arr[i]);
+					//word.append(arr[i]);
+					i++;
+				}
+				if (vowelFlag == true) {
+					this.numSyllables++;
+					vowelFlag =false;
+					//System.out.print("--");
+					vowelCount ++;
+					i--;
+				}
+				i++;
+			}
+			
+			if(wordFlag == true){
+				this.numWords++;
+				wordFlag = false;
+				if (vowelCount > 1 && arr[i-1] == 'e' && !isVowel(arr[i-2])) {
+					this.numSyllables--;
+					//System.out.print("last e =" + arr[i-1]);
+				}
+			}
+			
+			while(i<arr.length && (arr[i]=='!' || arr[i]=='.' || arr[i]=='?')) {
+				i++;
+				senFlag=true;
+			}
+			if(senFlag == true) {
+				senFlag = false;
+				if(i != arr.length )
+					this.numSentences++;
+				i--;
+			}
+			i++;
+		}
+		
+		
+		if(this.numWords > 0)
+			this.numSentences++;
 	}
 
 	
@@ -73,7 +135,7 @@ public class EfficientDocument extends Document {
 	@Override
 	public int getNumSentences() {
 		//TODO: write this method.  Hint: It's simple
-		return 0;
+		return this.numSentences;
 	}
 
 	
@@ -94,7 +156,7 @@ public class EfficientDocument extends Document {
 	@Override
 	public int getNumWords() {
 		//TODO: write this method.  Hint: It's simple
-	    return 0;
+	    return this.numWords;
 	}
 
 
@@ -116,7 +178,7 @@ public class EfficientDocument extends Document {
 	@Override
 	public int getNumSyllables() {
         //TODO: write this method.  Hint: It's simple
-        return 0;
+        return this.numSyllables;
 	}
 	
 	// Can be used for testing
@@ -125,8 +187,9 @@ public class EfficientDocument extends Document {
 	{
 	    testCase(new EfficientDocument("This is a test.  How many???  "
                 + "Senteeeeeeeeeences are here... there should be 5!  Right?"),
-                16, 13, 5);
-        testCase(new EfficientDocument(""), 0, 0, 0);
+                16, 13, 5);//abcdefg???hijklmn???opq?rstuv?wxyz!
+
+        testCase(new EfficientDocument("abcdefg???hijklmn???opq?rstuv?wxyz!"), 0, 0, 0);
         testCase(new EfficientDocument("sentence, with, lots, of, commas.!  "
                 + "(And some poaren)).  The output is: 7.5."), 15, 11, 4);
         testCase(new EfficientDocument("many???  Senteeeeeeeeeences are"), 6, 3, 2); 

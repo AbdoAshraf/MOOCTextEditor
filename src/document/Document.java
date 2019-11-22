@@ -67,7 +67,10 @@ public abstract class Document {
 		// TODO: Implement this method so that you can call it from the 
 	    // getNumSyllables method in BasicDocument (module 2) and 
 	    // EfficientDocument (module 3).
-	    return 0;
+		String text = this.getText().toLowerCase();
+		BasicDocument basicDocument = new BasicDocument(text);
+		List<String> tokens1 = basicDocument.getTokens(" [^aouiywe]+e |[aouiyw]+e*|e[aouiywe]+| e|[^aouiywe]e[^aouiywe .,!)]");
+        return tokens1.size();
 	}
 	
 	/** A method for testing
@@ -90,7 +93,7 @@ public abstract class Document {
 			System.out.println("\nIncorrect number of syllables.  Found " + syllFound 
 					+ ", expected " + syllables);
 			passed = false;
-		}
+		}/**/
 		if (wordsFound != words) {
 			System.out.println("\nIncorrect number of words.  Found " + wordsFound 
 					+ ", expected " + words);
@@ -132,7 +135,6 @@ public abstract class Document {
 	{
 	    // TODO: You will play with this method in week 1, and 
 		// then implement it in week 2
-		
 	    return  (206.835 - 1.015*(Double.valueOf(getNumWords())/getNumSentences()) - 
 	    		84.6*(Double.valueOf(getNumSyllables())/getNumWords()));
 	}

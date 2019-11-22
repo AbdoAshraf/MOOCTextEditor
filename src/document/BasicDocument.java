@@ -92,7 +92,7 @@ public class BasicDocument extends Document
 		BasicDocument basicDocument = new BasicDocument(text);
 		List<String> tokens1 = basicDocument.getTokens(" [^aouiywe]+e |[aouiyw]+e*|e[aouiywe]+| e|[^aouiywe]e[^aouiywe .,!)]");
 
-		System.out.println(tokens1);
+		//System.out.println(tokens1);
 		
 		//int vowels;
 		/*for (String word : tokens) {
